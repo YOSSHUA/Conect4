@@ -84,7 +84,6 @@ namespace Connect4
             for (int i = 1; i <= M - 1; ++i)
             {
                 g.DrawLine(pen, new Point(i * circleWidth, 0), new Point(i * circleWidth, panelHeight));
-
             }
             for (int i = 0; i < N; ++i)
             {

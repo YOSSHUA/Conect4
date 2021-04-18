@@ -14,8 +14,7 @@ using System.Windows.Forms;
 namespace Connect4
 {
     public partial class Form1 : Form
-    {
-        System.Media.SoundPlayer startSoundPlayer = new System.Media.SoundPlayer("pesna.wav");
+    {        
         private Graphics g;
         Game game;
         public string FileName { get; set; }
@@ -28,7 +27,6 @@ namespace Connect4
             DoubleBuffered = true;
             g = panel1.CreateGraphics();
             FileName = "Untitled";
-            startSoundPlayer.Play();
             time = 30;
             timer1.Start();
         }
@@ -225,7 +223,7 @@ namespace Connect4
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            startSoundPlayer.Stop();
+            
         }
     }
 }
