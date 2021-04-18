@@ -61,6 +61,7 @@
     <Compile Include="Rules.Designer.cs">
       <DependentUpon>Rules.cs</DependentUpon>
     </Compile>
+    <Compile Include="solver.cs" />
     <Compile Include="StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
