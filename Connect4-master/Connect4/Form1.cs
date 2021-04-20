@@ -20,10 +20,10 @@ namespace Connect4
         public string FileName { get; set; }
         int time;
 
-        public Form1(int N , int M, int difficulty, Color p1, Color p2)
+        public Form1( int difficulty, Color p1, Color p2)
         {
             InitializeComponent();
-            game = new Game(N, M, difficulty, panel1.Height, panel1.Width, p1, p2);
+            game = new Game(difficulty, panel1.Height, panel1.Width, p1, p2);
             DoubleBuffered = true;
             g = panel1.CreateGraphics();
             FileName = "Untitled";

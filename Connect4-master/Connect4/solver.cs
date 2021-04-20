@@ -8,15 +8,15 @@ namespace con4
     {
         long[] bitboard;    //Tablero
         int counter = 0;    //Contador para saber quien es el tirador
-        int[] height;       //Indica siguiente posición donde puedes poner fichar
-        int [] moves;       //Hace movimiento y los guarda
-        
+        int[] height = { 0, 7, 14, 21, 28, 35, 42 };       //Indica siguiente posición donde puedes poner fichar
+        int[] moves;       //Hace movimiento y los guarda
+
         public const int PLAYER = 1;
         public const int COMPUTER = 2;
         public const int DRAW = 3;
-        public  int N;
-        public  int M;
-        public  int maxDepth;
+        public int N;
+        public int M;
+        public int maxDepth;
         public HashSet<String> increment;
         public HashSet<String> decrement;
         public Dictionary<string, int> visited;
@@ -33,14 +33,13 @@ namespace con4
         public Solver(int N, int M, int maxDepth, int panelHeight, int panelWidth, Color p1, Color p2)
         {
             player1 = p1;
-            player2 = p2;                        
+            player2 = p2;
             this.N = 6; // Filas
             this.M = 7; // Columnas
             this.maxDepth = maxDepth;
             resize(panelHeight, panelWidth);
             undo = new Stack<int>();
             bitboard = new long[2];
-            height = new int[10];
             moves = new int[500];
             player1 = p1;
             player2 = p2;
@@ -60,7 +59,7 @@ namespace con4
         {
             Pen pen = new Pen(Color.Black, 2);
             g.Clear(Color.Blue);
-            for (int i = 0; i <  M ; ++i)
+            for (int i = 0; i < M; ++i)
             {
                 g.DrawLine(pen, new Point(i * circleWidth, 0), new Point(i * circleWidth, panelHeight));
             }
@@ -69,10 +68,10 @@ namespace con4
                 for (int j = 0; j < M; ++j) // Columnas
                 {
                     //
-                    Color color = Color.White;                    
-                    if( ( bitboard[0] & (1<< 7*j+i))   == 1 )                    
+                    Color color = Color.White;
+                    if ((bitboard[0] & (1L << 7 * j + i)) == 1)
                         color = player1;
-                    if ((bitboard[1] & (1 << 7 * j + i)) == 1)
+                    if ((bitboard[1] & (1L << 7 * j + i)) == 1)
                         color = player2;
                     Brush brush = new SolidBrush(color);
                     int x = (j * circleWidth) + (circleWidth / 2) - Radius;
@@ -123,38 +122,77 @@ namespace con4
             }
             return moves;
         }
-        int evalPosition(long pos)  //
+        int evalPosition()  //
         {
             List<int> nextMov = validMoves();
             int winningMovs = 0;
-            foreach(int col in nextMov)
+            foreach (int col in nextMov)
             {
                 makeMove(col);
-                if(isWin(bitboard[counter & 1]))
+                if (isWin(bitboard[counter & 1]))
                 {
                     winningMovs++;
                 }
-                if (isWin(bitboard[counter ^ 1]))
+                int aux = counter & 1 ^ 1;
+                if (isWin(bitboard[aux]))
                 {
                     winningMovs--;
                 }
-                undoMove();                
+                undoMove();
             }
             return winningMovs;
 
         }
         int maxVal = 500;
         int bestMov;
-        void applyMove(int player, int depth)
+        public int applyMove(int player, int col = -1)
         {
-            int ans = minimax(-maxVal, maxVal, depth);
-
+            int fin = -1;
+            if (player == 0)
+            {
+                counter = 1;
+                makeMove(col - 1);
+                if (isWin(bitboard[1]))
+                    fin = 1;
+            }
+            else
+            {
+                counter = 0;
+                int ans = minimax(-maxVal, maxVal, maxDepth);
+                Console.WriteLine("Computer play " + Convert.ToString(bestMov + 1));
+                makeMove(bestMov);
+                counter = 0;
+                if (isWin(bitboard[0]))
+                    fin = 2;
+            }
+            return fin;
         }
-        
-        
+        public void printBoard()
+        {
+            int a;
+            for (int i = 5; i >= 0; i--)
+            {
+                if (i == 2)
+                    a = 0;
+                Console.Write(" ");
+                for (int j = 0; j < 7; j++)
+                {
+
+                    if ((bitboard[0] & (1L << 7 * j + i)) > 0)
+                        Console.Write("2 ");
+                    else if ((bitboard[1] & (1L << 7 * j + i)) > 0)
+                        Console.Write("1 ");
+                    else
+                        Console.Write("0 ");
+                }
+                Console.WriteLine("");
+            }
+        }
+
+
         int minimax(int alpha, int beta, int depth)
         {
-            if(isWin(bitboard[counter & 1]))
+            if (isWin(bitboard[counter & 1]))
             {
                 if ((counter & 1) == 1)
                     return -maxVal;
@@ -164,9 +202,9 @@ namespace con4
             if (depth == 0)
             {
                 if ((counter & 1) == 1)
-                    return evalPosition(bitboard[counter & 1]);
+                    return evalPosition();
                 else
-                    return evalPosition(bitboard[counter & 1]);
+                    return evalPosition();
             }
             if ((counter & 1) == 0)
             {

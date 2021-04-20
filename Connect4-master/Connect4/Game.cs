@@ -41,7 +41,7 @@ namespace Connect4
         Color player1;
         Color player2;
 
-        public Game(int N, int M, int maxDepth, int panelHeight, int panelWidth, Color p1, Color p2)
+        public Game(int maxDepth, int panelHeight, int panelWidth, Color p1, Color p2)
         {
             player1 = p1;
             player2 = p2;
@@ -60,8 +60,8 @@ namespace Connect4
                 decrement.Add(line);
             }
             board = new int[N, M];
-            this.N = N;
-            this.M = M;
+            this.N = 6;
+            this.M = 7;
             this.maxDepth = maxDepth;
             resize(panelHeight, panelWidth);
             undo = new Stack<int>();

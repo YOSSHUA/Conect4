@@ -48,7 +48,7 @@ namespace Connect4
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form1 form = new Form1((int)numericUpDown1.Value, (int)numericUpDown2.Value, difficulty, player1, player2);
+            Form1 form = new Form1( difficulty, player1, player2);
             this.Visible = false;
             DialogResult dr= form.ShowDialog();
             if(dr == DialogResult.Cancel)
@@ -90,6 +90,11 @@ namespace Connect4
             {
                 difficulty = 6;
             }
+        }
+
+        private void StartForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
