@@ -14,8 +14,8 @@ namespace con4
         public const int PLAYER = 1;
         public const int COMPUTER = 2;
         public const int DRAW = 3;
-        public int N;
-        public int M;
+        public int N; // Filas
+        public int M; // Columnas
         public int maxDepth;
         public HashSet<String> increment;
         public HashSet<String> decrement;
@@ -30,7 +30,7 @@ namespace con4
         Color player1;
         Color player2;
 
-        public Solver(int N, int M, int maxDepth, int panelHeight, int panelWidth, Color p1, Color p2)
+        public Solver( int maxDepth, int panelHeight, int panelWidth, Color p1, Color p2)
         {
             player1 = p1;
             player2 = p2;
@@ -57,6 +57,7 @@ namespace con4
 
         public void printBoard(Graphics g)
         {
+            int a;
             Pen pen = new Pen(Color.Black, 2);
             g.Clear(Color.Blue);
             for (int i = 0; i < M; ++i)
@@ -67,15 +68,17 @@ namespace con4
             {
                 for (int j = 0; j < M; ++j) // Columnas
                 {
+                    //if (i == 0)
+                    //    a = 0;
                     //
                     Color color = Color.White;
-                    if ((bitboard[0] & (1L << 7 * j + i)) == 1)
+                    if ((bitboard[0] & (1L << 7 * j + i)) > 0)
                         color = player1;
-                    if ((bitboard[1] & (1L << 7 * j + i)) == 1)
+                    if ((bitboard[1] & (1L << 7 * j + i)) > 0)
                         color = player2;
                     Brush brush = new SolidBrush(color);
                     int x = (j * circleWidth) + (circleWidth / 2) - Radius;
-                    int y = (i * circleHeight) + (circleHeight / 2) - Radius;
+                    int y = ((5-i) * circleHeight) + (circleHeight / 2) - Radius;
                     g.FillEllipse(brush, x, y, 2 * Radius, 2 * Radius);
                     brush.Dispose();
                 }
@@ -147,11 +150,11 @@ namespace con4
         int bestMov;
         public int applyMove(int player, int col = -1)
         {
-            int fin = -1;
+            int fin = 0; 
             if (player == 0)
             {
                 counter = 1;
-                makeMove(col - 1);
+                makeMove(col);
                 if (isWin(bitboard[1]))
                     fin = 1;
             }
@@ -165,15 +168,32 @@ namespace con4
                 if (isWin(bitboard[0]))
                     fin = 2;
             }
+            if(fin == 0)
+            {
+                int cont = 0;
+                for (int i = 5; i >= 0; i--)
+                {                    
+                    Console.Write(" ");
+                    for (int j = 0; j < 7; j++)
+                    {
+
+                        if ((bitboard[0] & (1L << 7 * j + i)) > 0)
+                            cont++;
+                        else if ((bitboard[1] & (1L << 7 * j + i)) > 0)
+                            cont++;                        
+                    }
+                    Console.WriteLine("");
+                }
+                if (cont == 42)
+                    fin = 3;
+            }
             return fin;
         }
         public void printBoard()
         {
             int a;
             for (int i = 5; i >= 0; i--)
-            {
-                if (i == 2)
-                    a = 0;
+            {                
                 Console.Write(" ");
                 for (int j = 0; j < 7; j++)
                 {
@@ -243,6 +263,18 @@ namespace con4
                 return bestValue;
             }
         }
+        public int playerMove(Point p)
+        {
+            int ans = -1;
+            int choice = p.X / circleWidth;
+            if (!validMoves().Contains(choice))
+                return ans;
+            ans =  applyMove(0, choice);
+            Console.WriteLine("Choice: " + choice); //DEBUGGING!            
+            return ans;
+        }
+        
+
     }
 
 }

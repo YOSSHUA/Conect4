@@ -59,9 +59,9 @@ namespace Connect4
             {
                 decrement.Add(line);
             }
-            board = new int[N, M];
             this.N = 6;
             this.M = 7;
+            board = new int[N, M];            
             this.maxDepth = maxDepth;
             resize(panelHeight, panelWidth);
             undo = new Stack<int>();

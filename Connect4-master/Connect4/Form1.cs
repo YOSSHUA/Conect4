@@ -1,4 +1,5 @@
-﻿using System;
+﻿using con4;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,81 +17,74 @@ namespace Connect4
     public partial class Form1 : Form
     {        
         private Graphics g;
-        Game game;
-        public string FileName { get; set; }
-        int time;
+        Solver solver;
+        //Game game;
+        public string FileName { get; set; }        
 
         public Form1( int difficulty, Color p1, Color p2)
         {
             InitializeComponent();
-            game = new Game(difficulty, panel1.Height, panel1.Width, p1, p2);
-            DoubleBuffered = true;
+            solver = new Solver(difficulty, panel1.Height, panel1.Width, p1, p2);
+            //game = new Game(difficulty, panel1.Height, panel1.Width, p1, p2);            
             g = panel1.CreateGraphics();
-            FileName = "Untitled";
-            time = 30;
-            timer1.Start();
+            FileName = "Untitled";            
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            game.printBoard(g);
-            Console.WriteLine("INVALIDATED!");
+            solver.printBoard(g);
+            //game.printBoard(g);            
         }
 
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (game.playerMove(e.Location)) {
-                game.printBoard(game.board); // DEBUGGING
-                Invalidate(true);
-                int winner = game.checkWinner();
-                if (winner == Game.PLAYER)
-                {
-                    timer1.Stop();
+            int play = solver.playerMove(e.Location);
+            if (play == 0 || play == 1 || play == 2 || play == 3) {
+                solver.printBoard(); // Debug
+                //game.printBoard(game.board); // DEBUGGING
+                Invalidate(true);                
+                if (play == 1)
+                {                    
                     MessageBox.Show("Player wins!", "Winner!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
                 }
-                else if (winner == Game.COMPUTER)
-                {
-                    timer1.Stop();
+                else if (play == 2)
+                {                    
                     MessageBox.Show("Computer wins!", "Winner!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
                 }
-                else if (winner == Game.DRAW)
-                {
-                    timer1.Stop();
+                else if (play == 3)
+                {                    
                     MessageBox.Show("The board is full!", "Full!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
                 }
-                game.computerMove();
-                game.printBoard(game.board); // DEBUGGING
+                play = solver.applyMove(1);
+                //game.computerMove();
+                solver.printBoard();
+                //game.printBoard(game.board); // DEBUGGING
                 Invalidate(true);
-                winner = game.checkWinner();
-                if (winner == Game.PLAYER)
-                {
-                    timer1.Stop();
+                if (play == 1)
+                {                    
                     MessageBox.Show("Player wins!", "Winner!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
                 }
-                else if (winner == Game.COMPUTER)
-                {
-                    timer1.Stop();
+                else if (play == 2)
+                {                    
                     MessageBox.Show("Computer wins!", "Winner!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
-                 
-                } else if (winner == Game.DRAW)
+                }
+                else if (play == 3)
                 {
-                    timer1.Stop();
                     MessageBox.Show("The board is full!", "Full!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Close();
                     return;
                 }
-                time = 30;
-                textBox1.Text = time.ToString();
+
             }
             else
             {
@@ -116,7 +110,7 @@ namespace Connect4
                 using (FileStream fileStream = new FileStream(FileName, FileMode.Create))
                 {
                     IFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(fileStream, game);
+                    //formatter.Serialize(fileStream, game);
                 }
             }
         }
@@ -133,7 +127,7 @@ namespace Connect4
                     using (FileStream fileStream = new FileStream(FileName, FileMode.Open))
                     {
                         IFormatter formater = new BinaryFormatter();
-                        game = (Game)formater.Deserialize(fileStream);
+                        //game = (Game)formater.Deserialize(fileStream);
                     }
                 }
                 catch (Exception ex)
@@ -158,33 +152,21 @@ namespace Connect4
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            game.undoMove();
+            //game.undoMove();
             Invalidate(true);
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (game != null)
+            if (solver != null)
             {
                 panel1.Size = new Size(this.Size.Width - 36, this.Size.Height - 70);
                 g = panel1.CreateGraphics();
-                game.resize(panel1.Height, panel1.Width);
+                solver.resize(panel1.Height, panel1.Width);
                 Invalidate(true);
             }
         }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
-            time--;
-            textBox1.Text = time.ToString();
-            if (time == 0)
-            {
-                timer1.Stop();
-                MessageBox.Show("Game Over!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                this.Close();
-            }
-        }
+      
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -194,8 +176,7 @@ namespace Connect4
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            timer1.Stop();
+        {            
             Rules rules = new Rules();
             DialogResult dr = rules.ShowDialog();
             if (dr == DialogResult.Cancel)

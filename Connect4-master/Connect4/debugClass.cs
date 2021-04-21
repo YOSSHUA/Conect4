@@ -13,7 +13,7 @@ namespace Connect4
         static void main(string[] args)
         {
             int dif = Int32.Parse(Console.ReadLine());
-            Solver s = new Solver(6, 7, dif, 10, 10, Color.White, Color.Black);
+            Solver s = new Solver( dif, 10, 10, Color.White, Color.Black);
             int moves = 0;
             while (true && moves < 42)
             {
