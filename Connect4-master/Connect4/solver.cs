@@ -59,7 +59,8 @@ namespace con4
         {
             int a;
             Pen pen = new Pen(Color.Black, 2);
-            g.Clear(Color.Blue);
+            Color _color = System.Drawing.ColorTranslator.FromHtml("#fcf403");                        
+            g.Clear(_color);
             for (int i = 0; i < M; ++i)
             {
                 g.DrawLine(pen, new Point(i * circleWidth, 0), new Point(i * circleWidth, panelHeight));
@@ -67,11 +68,8 @@ namespace con4
             for (int i = 0; i < N; ++i) // Filas
             {
                 for (int j = 0; j < M; ++j) // Columnas
-                {
-                    //if (i == 0)
-                    //    a = 0;
-                    //
-                    Color color = Color.White;
+                {                    
+                    Color color = Color.Gray;
                     if ((bitboard[0] & (1L << 7 * j + i)) > 0)
                         color = player1;
                     if ((bitboard[1] & (1L << 7 * j + i)) > 0)
@@ -111,7 +109,7 @@ namespace con4
 
             }
             return false;
-        }
+        }        
 
         List<int> validMoves()//Lista de de movimientos validos
         {
@@ -125,40 +123,56 @@ namespace con4
             }
             return moves;
         }
-        int evalPosition()  //
+        int getPoints(long act)
         {
-            List<int> nextMov = validMoves();
-            int winningMovs = 0;
-            foreach (int col in nextMov)
+            int ans = 0;
+            // check 5             
+            int[] directions = { 1, 7, 6, 8 };
+            for (int i = 0; i < directions.Length; i++)
             {
-                makeMove(col);
-                if (isWin(bitboard[counter & 1]))
-                {
-                    winningMovs++;
-                }
-                int aux = counter & 1 ^ 1;
-                if (isWin(bitboard[aux]))
-                {
-                    winningMovs--;
-                }
-                undoMove();
+                if ((act & (act >> directions[i]) &
+                   (act >> (2 * directions[i])) & (act >> (3 * directions[i])) & (act >> (4 * directions[i]))) != 0)
+                    ans += 10000;
             }
-            return winningMovs;
-
+            // check 4                         
+            for (int i = 0; i < directions.Length; i++)
+            {
+                if ((act & (act >> directions[i]) &
+                   (act >> (2 * directions[i])) & (act >> (3 * directions[i]))) != 0)
+                    ans += 1000;
+            }
+            // check 3
+            for (int i = 0; i < directions.Length; i++)
+            {
+                if ((act & (act >> directions[i]) &
+                   (act >> (2 * directions[i]))) != 0)
+                    ans += 100;
+            }
+            // check 2
+            for (int i = 0; i < directions.Length; i++)
+            {
+                if ((act & (act >> directions[i])) != 0)
+                    ans += 10;
+            }
+            return ans;
         }
-        int maxVal = 500;
+        int evalPosition()  
+        {
+            return getPoints(bitboard[0]) - getPoints(bitboard[1]);
+        }
+        int maxVal = 100000;
         int bestMov;
         public int applyMove(int player, int col = -1)
         {
             int fin = 0; 
-            if (player == 0)
+            if (player == 0) // Jugador
             {
                 counter = 1;
                 makeMove(col);
                 if (isWin(bitboard[1]))
                     fin = 1;
             }
-            else
+            else // Computadora
             {
                 counter = 0;
                 int ans = minimax(-maxVal, maxVal, maxDepth);
@@ -222,7 +236,7 @@ namespace con4
             if (depth == 0)
             {
                 if ((counter & 1) == 1)
-                    return evalPosition();
+                    return -evalPosition();
                 else
                     return evalPosition();
             }
@@ -270,7 +284,7 @@ namespace con4
             if (!validMoves().Contains(choice))
                 return ans;
             ans =  applyMove(0, choice);
-            Console.WriteLine("Choice: " + choice); //DEBUGGING!            
+            Console.WriteLine("Persona columna: " + (choice+1)); //DEBUGGING!            
             return ans;
         }
         

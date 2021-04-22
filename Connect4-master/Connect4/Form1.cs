@@ -92,69 +92,7 @@ namespace Connect4
             }
         }
 
-        private void saveFile()
-        {
-            if (FileName == "Untitled")
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Game file (*.game)|*.game";
-                saveFileDialog.Title = "Save game";
-                saveFileDialog.FileName = FileName;
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    FileName = saveFileDialog.FileName;
-                }
-            }
-            if (FileName != null)
-            {
-                using (FileStream fileStream = new FileStream(FileName, FileMode.Create))
-                {
-                    IFormatter formatter = new BinaryFormatter();
-                    //formatter.Serialize(fileStream, game);
-                }
-            }
-        }
-        private void openFile()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Game file (*.game)|*.game";
-            openFileDialog.Title = "Open game";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                FileName = openFileDialog.FileName;
-                try
-                {
-                    using (FileStream fileStream = new FileStream(FileName, FileMode.Open))
-                    {
-                        IFormatter formater = new BinaryFormatter();
-                        //game = (Game)formater.Deserialize(fileStream);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Could not read file: " + FileName);
-                    FileName = null;
-                    return;
-                }
-                Invalidate(true);
-            }
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            saveFile();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            openFile();
-        }
-
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //game.undoMove();
-            Invalidate(true);
-        }
+        
 
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -168,34 +106,8 @@ namespace Connect4
         }
       
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Abort;
-            this.Close();
-            this.Dispose();
-        }
+        
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
-            Rules rules = new Rules();
-            DialogResult dr = rules.ShowDialog();
-            if (dr == DialogResult.Cancel)
-                timer1.Start();
-
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StartForm startForm = new StartForm();
-            this.Close();
-            this.Dispose();
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FileName = "Untitled";
-            saveFile();
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {

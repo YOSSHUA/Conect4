@@ -18,7 +18,7 @@ namespace Connect4
         public StartForm()
         {
             InitializeComponent();
-            player1 = Color.Yellow;
+            player1 = Color.Blue;
             player2 = Color.Red;
             button1.BackColor = player1;
             button2.BackColor = player2;
@@ -48,7 +48,7 @@ namespace Connect4
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form1 form = new Form1( difficulty, player1, player2);
+            Form1 form = new Form1( difficulty, player1, player2);            
             this.Visible = false;
             DialogResult dr= form.ShowDialog();
             if(dr == DialogResult.Cancel)
@@ -83,13 +83,7 @@ namespace Connect4
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(comboBox1.SelectedIndex == 0)
-            {
-                difficulty = 3;
-            } else
-            {
-                difficulty = 6;
-            }
+            difficulty = Int32.Parse(comboBox1.SelectedItem.ToString());
         }
 
         private void StartForm_Load(object sender, EventArgs e)

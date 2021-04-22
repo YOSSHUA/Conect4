@@ -71,7 +71,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(121, 44);
             this.button3.TabIndex = 6;
-            this.button3.Text = "Start";
+            this.button3.Text = "Iniciar";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -80,30 +80,34 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Teal;
-            this.label1.Location = new System.Drawing.Point(218, 21);
+            this.label1.Location = new System.Drawing.Point(181, 19);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(110, 18);
+            this.label1.Size = new System.Drawing.Size(186, 18);
             this.label1.TabIndex = 12;
-            this.label1.Text = "Elige un color:";
+            this.label1.Text = "Elige un color dando clic:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(147, 174);
+            this.label2.Location = new System.Drawing.Point(52, 174);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 17);
+            this.label2.Size = new System.Drawing.Size(209, 17);
             this.label2.TabIndex = 13;
-            this.label2.Text = "Dificultad:";
+            this.label2.Text = "Dificultad(nivel de profundidad):";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "Easy",
-            "Hard"});
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"});
             this.comboBox1.Location = new System.Drawing.Point(282, 174);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 24);
@@ -123,7 +127,7 @@
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "StartForm";
-            this.Text = "Connect 4";
+            this.Text = "Conecta 4";
             this.Load += new System.EventHandler(this.StartForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
