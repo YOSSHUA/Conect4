@@ -158,7 +158,7 @@ namespace con4
         }
         int evalPosition()  
         {
-            return getPoints(bitboard[0]) - getPoints(bitboard[1]);
+            return getPoints(bitboard[counter&1]) - getPoints(bitboard[counter&1^1]);
         }
         int maxVal = 100000;
         int bestMov;
