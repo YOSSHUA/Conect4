@@ -222,7 +222,7 @@ namespace con4
             if (depth == 0)
             {
                 if ((counter & 1) == 1)
-                    return evalPosition();
+                    return -evalPosition();
                 else
                     return evalPosition();
             }
